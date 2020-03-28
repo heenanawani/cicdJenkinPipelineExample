@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="06cc2e19-54e3-4ffc-a697-06f58fa48a28" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="4d746262-d5de-4daf-a9a8-5de529bb970e" >
+		<wsc:connection wsdlLocation="delta.wsdl" service="TicketServiceService" port="TicketServicePort" address="http://mu.learn.mulesoft.com/delta" />
+	</wsc:config>
+	<flow name="cicdexamplejenkinFlow" doc:id="d84cd61c-ed85-422f-9003-c55c11d5bd96" >
+		<http:listener doc:name="Listener" doc:id="d6c1a61c-0989-454e-a672-ccc6ccf7cb75" config-ref="HTTP_Listener_config" path="/cicd"/>
+		<wsc:consume operation="listAllFlights" doc:name="Consume" doc:id="47e948a2-4ea8-41f7-9188-5efb099349ee" config-ref="Web_Service_Consumer_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="7a47a742-25b4-4564-af55-b49e58c26a3a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="cfd02d3c-dca3-402b-a84e-dafacfc7b8e7" message="#[payload]"/>
+	</flow>
+</mule>

@@ -36,7 +36,7 @@
 				<workerType>Micro</workerType>
 				<applicationName>CICDExampleJenkin</applicationName>
 				<password>bHANUPAWAN@22</password>
-				<muleVersion>4.1.4</muleVersion>
+				<muleVersion>4.1.2</muleVersion>
 				</cloudHubDeployment>
 				</configuration>
 			</plugin>
